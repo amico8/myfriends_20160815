@@ -1,3 +1,36 @@
+<?php
+  // ここにDBに登録する処理を記述する
+  // ①DBへ接続
+  $dsn = 'mysql:dbname=myfriends;host=localhost';
+  $user = 'root';
+  $password = '';
+  $dbh = new PDO($dsn, $user, $password);
+  $dbh->query('SET NAMES utf8');
+
+  // ②SQL作成
+  $sql = 'SELECT * FROM `areas`';
+
+  // ③SQL実行
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+
+  // データ格納用変数
+  $areas = array();
+
+  // ④データ取得
+  while (1) {
+    $rec = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($rec == false) {
+      break;
+    }
+    $areas[] = $rec;
+  }
+
+  // DB切断
+  $dbh = null;
+
+  // var_dump($areas);
+?>
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -58,31 +91,13 @@
           </thead>
           <tbody>
             <!-- id, 県名を表示 -->
+            <?php foreach ($areas as $area) : ?>
             <tr>
-              <td><div class="text-center">1</div></td>
-              <td><div class="text-center"><a href="show.html">北海道</a></div></td>
+              <td><div class="text-center"><?php echo $area['area_id']; ?></div></td>
+              <td><div class="text-center"><a href="show.html"><?php echo $area['area_name']; ?></a></div></td>
               <td><div class="text-center">3</div></td>
             </tr>
-            <tr>
-              <td><div class="text-center">2</div></td>
-              <td><div class="text-center"><a href="show.html">青森</a></div></td>
-              <td><div class="text-center">7</div></td>
-            </tr>
-            <tr>
-              <td><div class="text-center">3</div></td>
-              <td><div class="text-center"><a href="show.html">岩手</a></div></td>
-              <td><div class="text-center">2</div></td>
-            </tr>
-            <tr>
-              <td><div class="text-center">4</div></td>
-              <td><div class="text-center"><a href="show.html">宮城</a></div></td>
-              <td><div class="text-center">6</div></td>
-            </tr>
-            <tr>
-              <td><div class="text-center">5</div></td>
-              <td><div class="text-center"><a href="show.html">秋田</a></div></td>
-              <td><div class="text-center">8</div></td>
-            </tr>
+            <?php endforeach; ?>
           </tbody>
         </table>
       </div>
