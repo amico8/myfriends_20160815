@@ -1,3 +1,31 @@
+<?php
+  // ここにDBに登録する処理を記述する
+  // ①DBへ接続
+  $dsn = 'mysql:dbname=myfriends;host=localhost';
+  $user = 'root';
+  $password = '';
+  $dbh = new PDO($dsn, $user, $password);
+  $dbh->query('SET NAMES utf8');
+
+  // ①パラメータを受け取る
+  $friend_id = $_GET['friend_id'];
+
+  // ②受け取ったパラメータに紐づく友達のデータを取得するSQL文作成
+  $sql = 'SELECT * FROM `friends` WHERE `freind_id` = ?';
+  $data[] = $friend_id;
+
+  // ③SQLを実行
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute($data);
+
+  // ④友達のデータを取得
+  $friends = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  var_dump($friends);
+
+  // DB切断
+  $dbh = null;
+?>
 <!DOCTYPE html>
 <html lang="ja">
   <head>
