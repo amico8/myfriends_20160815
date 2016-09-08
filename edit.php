@@ -40,6 +40,22 @@
     $areas[] = $rec;
   }
 
+  // データの更新処理（更新ボタンクリック時）
+  if (!empty($_POST)) {
+    $sql = 'UPDATE `friends` SET `friend_name`=?,`area_id`=?,`gender`=?,`age`=? WHERE `freind_id` = ?';
+    $edit_data[] = $_POST['name'];
+    $edit_data[] = $_POST['area_id'];
+    $edit_data[] = $_POST['gender'];
+    $edit_data[] = $_POST['age'];
+    $edit_data[] = $friend_id;
+
+    // SQL実行
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($edit_data);
+
+
+  }
+
   // DB切断
   $dbh = null;
 ?>
@@ -93,7 +109,7 @@
     <div class="row">
       <div class="col-md-4 content-margin-top">
         <legend>友達の編集</legend>
-        <form method="post" action="" class="form-horizontal" role="form">
+        <form method="post" action="edit.php?friend_id=<?php echo $friends['freind_id']; ?>" class="form-horizontal" role="form">
             <!-- 名前 -->
             <div class="form-group">
               <label class="col-sm-2 control-label">名前</label>
